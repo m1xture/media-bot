@@ -7,6 +7,7 @@ import MetatagsService from "../services/MetatagsService";
 import BaseCommand from "../types/BaseCommand";
 import type { FileData } from "../types/FileData";
 import streamFetchFile from "../utils/streamFetchFile";
+import { MAX_FILE_SIZE } from "../constants";
 
 class MetatagsCommand extends BaseCommand {
   name = "metatags";
@@ -23,8 +24,12 @@ class MetatagsCommand extends BaseCommand {
       const fileData = this.getFileIdFromMessage(targetMessage);
       await ctx.reply("Оброблюю мета-дані...");
       const file = await ctx.api.getFile(fileData.fileId);
-      if (!file.file_path) {
+      if (!file || !file.file_path) {
         throw new Error("Не вдалося зчитати файл");
+      }
+
+      if (file.file_size && file.file_size >= MAX_FILE_SIZE) {
+        throw new Error("Розмір файлу має бути <20 МБ");
       }
 
       const fileUrl = `https://api.telegram.org/file/bot${ctx.api.token}/${file.file_path}`;
