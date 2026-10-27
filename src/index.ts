@@ -26,6 +26,19 @@ bot.catch((err) => {
   logger.error("Bot error: " + err.error);
 });
 
-bot.start({
-  onStart: (me) => logger.info(`Bot @${me.username} is running (^o^)`),
+const main = async () => {
+  if (process.env.IS_PRODUCTION === "true") {
+    await setupWebhooks(bot);
+    logger.info("Bot running via webhooks");
+  } else {
+    await bot.api.deleteWebhook(); // avoid conflicts if a webhook was set earlier
+    await bot.start({
+      onStart: (me) => logger.info(`Bot @${me.username} is running (^o^)`),
+    });
+  }
+};
+
+main().catch((err) => {
+  logger.error("Fatal startup error: " + err);
+  process.exit(1);
 });

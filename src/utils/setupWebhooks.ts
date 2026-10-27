@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import express from "express";
 import { type Bot, webhookCallback } from "grammy";
+import logger from "../logger";
 
 const getWebhookData = () => {
   const { RENDER_EXTERNAL_URL: endpoint, TELEGRAM_BOT_TOKEN: token } =
@@ -24,6 +25,10 @@ const setupWebhooks = async (bot: Bot): Promise<Express> => {
   app.use(express.json());
   app.use(webhookCallback(bot, "express"));
   await bot.api.setWebhook(webhookData.endpoint);
+
+  const port = Number(process.env.PORT) || 3000;
+  app.listen(port, () => logger.info(`Webhook server listening on ${port}`));
+
   return app;
 };
 
