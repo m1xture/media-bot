@@ -1,9 +1,13 @@
-import { FileData } from "../types/FileData";
-import execFileAsync from "../utils/execFileAsync";
-import sharp from "sharp";
 import exifReader from "exif-reader";
-import { filterUselessTags, flattenExif, RawTags } from "../utils/metaUtils";
+import sharp from "sharp";
 import logger from "../logger";
+import type { FileData } from "../types/FileData";
+import execFileAsync from "../utils/execFileAsync";
+import {
+  filterUselessTags,
+  flattenExif,
+  type RawTags,
+} from "../utils/metaUtils";
 
 class MetatagsService {
   async getMetatags(
@@ -20,7 +24,6 @@ class MetatagsService {
         "-show_streams", // Include stream-level info (resolution, codec, framerate)
         filePath,
       ]);
-
 
       return JSON.parse(stdout);
     }

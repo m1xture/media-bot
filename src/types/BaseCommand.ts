@@ -1,6 +1,6 @@
-import { Bot, CommandContext, Context } from "grammy";
-import { Commmand } from "./Command";
+import type { Bot, CommandContext, Context } from "grammy";
 import logger from "../logger";
+import type { Commmand } from "./Command";
 
 export default abstract class BaseCommand implements Commmand {
   abstract readonly name: string;

@@ -1,4 +1,4 @@
-import { Bot, Context } from "grammy";
+import type { Bot } from "grammy";
 
 export interface Commmand {
   // Command name without slash

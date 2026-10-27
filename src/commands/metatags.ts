@@ -1,13 +1,12 @@
-import { CommandContext, Context } from "grammy";
-import logger from "../logger";
-import BaseCommand from "../types/BaseCommand";
-import { InputFile, Message } from "grammy/types";
-import { FileData } from "../types/FileData";
-import path from "path";
-import * as os from "node:os";
 import * as fs from "node:fs";
-import streamFetchFile from "../utils/streamFetchFile";
+import * as os from "node:os";
+import type { CommandContext, Context } from "grammy";
+import { InputFile, type Message } from "grammy/types";
+import path from "path";
 import MetatagsService from "../services/MetatagsService";
+import BaseCommand from "../types/BaseCommand";
+import type { FileData } from "../types/FileData";
+import streamFetchFile from "../utils/streamFetchFile";
 
 class MetatagsCommand extends BaseCommand {
   name = "metatags";
