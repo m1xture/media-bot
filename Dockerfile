@@ -28,4 +28,4 @@ COPY --from=build /app/dist ./dist
 # Run as the unprivileged user that ships with the node image
 USER node
 
-CMD ["npm", "start"]
+CMD ["node", "dist/index.js"]

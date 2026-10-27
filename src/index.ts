@@ -12,13 +12,6 @@ if (!token) {
 const bot = new Bot(token);
 
 let app = null;
-if (process.env.IS_PRODUCTION) {
-  app = setupWebhooks(bot);
-}
-
-bot.command("start", (ctx) =>
-  ctx.reply(`Привіт ${ctx.from?.first_name ?? ""}! `),
-);
 
 registerAllCommands(bot);
 
@@ -28,7 +21,7 @@ bot.catch((err) => {
 
 const main = async () => {
   if (process.env.IS_PRODUCTION === "true") {
-    await setupWebhooks(bot);
+    app = await setupWebhooks(bot);
     logger.info("Bot running via webhooks");
   } else {
     await bot.api.deleteWebhook(); // avoid conflicts if a webhook was set earlier
