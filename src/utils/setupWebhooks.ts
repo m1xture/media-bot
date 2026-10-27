@@ -19,17 +19,24 @@ const getWebhookData = () => {
 
 /* Set up Express server to use Telegram webhooks 
 instead of long polling in production only */
-const setupWebhooks = async (bot: Bot): Promise<Express> => {
+const setupWebhooks = async (bot: Bot) => {
+  const {  webhookUrl } = getWebhookData();
+
   const app = express();
-  const webhookData = getWebhookData();
   app.use(express.json());
+  app.get("/", (_req, res) => res.send("ok"));
   app.use(webhookCallback(bot, "express"));
-  await bot.api.setWebhook(webhookData.endpoint);
 
   const port = Number(process.env.PORT) || 3000;
   app.listen(port, () => logger.info(`Webhook server listening on ${port}`));
 
-  return app;
+  const info = await bot.api.getWebhookInfo();
+  if (info.url !== webhookUrl) {
+    await bot.api.setWebhook(webhookUrl);
+    logger.info("Webhook set");
+  } else {
+    logger.info("Webhook already set");
+  }
 };
 
 export default setupWebhooks;
